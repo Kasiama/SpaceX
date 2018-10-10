@@ -14,9 +14,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var starfield: SKEmitterNode!
     var player: SKSpriteNode!
     var scoreLabel:SKLabelNode!
+    var sceneScreener: SKScene!
+    var sceneSound: SKScene!
+    var sceneLevel: SKSpriteNode!
     var score: Int = 0 {
         didSet{
             scoreLabel.text = "Score: \(score)"
+            scoreLabel.zPosition = 0;
         }
     }
     var gameTimer: Timer!
@@ -161,6 +165,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bullet.physicsBody?.contactTestBitMask = alienCategory
         bullet.physicsBody?.collisionBitMask = 0
         bullet.physicsBody?.usesPreciseCollisionDetection = true
+       // bullet.blendMode.rawValue = 10;
         
         
         self.addChild(bullet)
