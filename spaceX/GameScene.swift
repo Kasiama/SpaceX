@@ -27,6 +27,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var aliens = ["alien","alien2","alien3"]
     let alienCategory : UInt32 = 0x1 << 1
      let bulletCategory : UInt32 = 0x1 << 0
+    let playerCategory : UInt32 = 0x1<<1
     var hiScore: Int = 0
     
     
@@ -37,7 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         starfield = SKEmitterNode(fileNamed: "Starfield")
-        starfield.position = CGPoint(x: 0, y: 1472)
+        starfield.position = CGPoint(x: 350, y: 1472)
         starfield.advanceSimulationTime(10)
         self.addChild(starfield)
         
@@ -45,7 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         player = SKSpriteNode(imageNamed: "shuttle")
-        player.position = CGPoint(x: 0, y: -300)
+        player.position = CGPoint(x:350 , y: 100)
         player.setScale(1.5)
         self.addChild(player)
         
@@ -56,7 +57,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontName = "AmericanTypewriter-Bold"
         scoreLabel.fontSize = 56
         scoreLabel.fontColor = UIColor.white
-        scoreLabel.position = CGPoint (x: -200, y: 600)
+        scoreLabel.position = CGPoint (x: 150, y: 1200)
         score = 0;
         self.addChild(scoreLabel)
         
@@ -74,16 +75,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didSimulatePhysics() {
         player.position.x += xAccelerate * 50
         
-        if player.position.x < -350{
-            player.position = CGPoint(x:  350, y: player.position.y)
+        if player.position.x < 0{
+            player.position = CGPoint(x:  700, y: player.position.y)
         }
-        else if player.position.x > 350{
-            player.position = CGPoint(x:  -350, y: player.position.y)
+        else if player.position.x > 700{
+            player.position = CGPoint(x:  0, y: player.position.y)
     }
     }
     
     
-    func didBegin(_ contact: SKPhysicsContact) {
+     func didBegin( _ contact: SKPhysicsContact) {
+        print("contact")
         var alienBody: SKPhysicsBody
         var bulletBody: SKPhysicsBody
         
@@ -124,9 +126,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         aliens = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: aliens) as! [String]
         
         let alien = SKSpriteNode(imageNamed: aliens[0])
-        let randomPos = GKRandomDistribution(lowestValue: -350, highestValue: 350)
+        let randomPos = GKRandomDistribution(lowestValue: 0, highestValue: 750)
         let pos = CGFloat(randomPos.nextInt())
-        alien.position = CGPoint(x: pos, y: 800)
+        alien.position = CGPoint(x: pos, y: 1300)
         alien.setScale(2)
         
         alien.physicsBody = SKPhysicsBody(rectangleOf: alien.size)
@@ -157,6 +159,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
          let bullet  = SKSpriteNode(imageNamed:"torpedo" )
         bullet.position = player.position
         bullet.position.y += 5
+      //  print("fire")
         
         bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width/2 )
         bullet.physicsBody?.isDynamic = true
@@ -173,7 +176,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let animDuration :TimeInterval = 0.3
         
         var actions = [SKAction]()
-        actions.append(SKAction.move(to: CGPoint(x: player.position.x, y: 800 ), duration: animDuration) )
+        actions.append(SKAction.move(to: CGPoint(x: player.position.x, y: 900 ), duration: animDuration) )
         actions.append(SKAction.removeFromParent())
         
         bullet.run(SKAction.sequence(actions))

@@ -34,6 +34,7 @@ class MainMenu: SKScene {
         if let location = touch?.location(in: self){
             let nodesArray = self.nodes(at: location)
             if nodesArray.first?.name == "newGameBtn"{
+               // var  gravityNode = SKNode!();
                 let transition = SKTransition.flipVertical(withDuration: 0.5)
                 let gameScene = GameScene(size: self.size)
                 self.view?.presentScene(gameScene,transition: transition)
